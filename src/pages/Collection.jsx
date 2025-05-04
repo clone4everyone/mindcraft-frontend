@@ -268,15 +268,12 @@ const Collection = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
           <h3 className="mt-4 text-lg font-medium text-gray-800">No tests found</h3>
-          <p className="mt-2 text-gray-600">Try adjusting your search or filter settings</p>
+          <p className="mt-2 text-gray-600">Give it a try and Start making Test from promt...</p>
           <button
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            onClick={() => {
-              setSearchTerm('');
-              setFilter('all');
-            }}
+            onClick={() => window.location.href = '/user/new'}
           >
-            Reset Filters
+           Create New Test
           </button>
         </motion.div>
       ) : viewMode === 'grid' ? (
@@ -333,7 +330,7 @@ const Collection = () => {
                 <div className="bg-gray-50 px-6 py-3 flex justify-between">
                   <button 
                     className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                    onClick={() => window.location.href = `/user/test/${test.id}`}
+                    onClick={() => gotoInstructionPage(user.id,test.id)}
                   >
                  Take Test
                   </button>

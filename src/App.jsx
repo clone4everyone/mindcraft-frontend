@@ -69,6 +69,7 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/user" element={
             <ProtectRoute><UserLayout /></ProtectRoute>}>
+              
             <Route path="new" element={
               <NewTest />} />
             <Route path="collection" element={<Collection />} />

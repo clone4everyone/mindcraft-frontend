@@ -40,7 +40,7 @@ const TestimonialsSection = () => {
   };
   return (
     <section id="testimonials" className="section bg-gray-50 dark:bg-dark-800 relative overflow-hidden">
-      <div className="mesh-overlay"></div>
+    
       
       <div className="container-custom">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -127,14 +127,14 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
         >
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto" >
             <h3 className="text-2xl font-bold mb-4">Ready to transform your testing workflow?</h3>
             <p className="text-dark-600 dark:text-dark-300 mb-6">
               Join thousands of developers saving hours every week with our AI-powered test generation.
             </p>
             <motion.p 
-              onClick={()=>handleGetStarted()}
-              className="btn btn-primary inline-block"
+              onClick={handleGetStarted}
+              className="btn btn-primary inline-block hover:cursor-pointer "
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

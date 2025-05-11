@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Clock, ChevronLeft, ChevronRight, CheckCircle, HelpCircle, AlertCircle, X, ArrowLeft, Eye, Award } from 'lucide-react';
-import axios from 'axios';
-import {useParams} from 'react-router-dom'
 import API from '../utils/API';
+import { useParams } from 'react-router-dom';
+
 export default function AttemptingTest() {
-    const {testId} = useParams();
+  const { testId } = useParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
@@ -19,18 +19,18 @@ export default function AttemptingTest() {
   const [viewingSolution, setViewingSolution] = useState(null);
   const containerRef = useRef(null);
   let initialtime;
+
   // Fetch test data
   useEffect(() => {
     const fetchTestData = async () => {
       try {
         setIsLoading(true);
-        const response = await API.post(`/api/v1/gemini/getTestById`,{
-            testId: testId
+        const response = await API.post(`/api/v1/gemini/getTestById`, {
+          testId: testId
         });
-        console.log(response.data.test)
         setTestData(response.data.test);
-        setTimeLeft(response.data.test.durationSeconds)
-        initialtime=response.data.test.durationSeconds;
+        setTimeLeft(response.data.test.durationSeconds);
+        initialtime = response.data.test.durationSeconds;
         setTimeout(() => {
           setIsLoading(false);
           setTimeout(() => setFadeIn(true), 100);
@@ -271,14 +271,16 @@ export default function AttemptingTest() {
               size={20} 
               onClick={() => window.location.href = '/'} 
             />
-            {testData.moduleName} - Test Results
+            <span className="truncate">
+              {testData.moduleName} - Test Results
+            </span>
           </div>
         </div>
 
-        <div className="flex-grow p-6 md:p-8 flex flex-col max-w-4xl mx-auto w-full">
-          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
+        <div className="flex-grow p-4 md:p-8 flex flex-col max-w-4xl mx-auto w-full">
+          <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 mb-6">
             <div className="text-center mb-6">
-              <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${
+              <div className={`inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full mb-4 ${
                 testResults.percentage >= 70 
                   ? 'bg-green-100' 
                   : testResults.percentage >= 40 
@@ -286,7 +288,7 @@ export default function AttemptingTest() {
                     : 'bg-red-100'
               }`}>
                 <Award 
-                  size={48} 
+                  size={32} 
                   className={`${
                     testResults.percentage >= 70 
                       ? 'text-green-600' 
@@ -296,53 +298,53 @@ export default function AttemptingTest() {
                   }`} 
                 />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
                 Test Complete!
               </h2>
-              <p className="text-gray-600 mt-1">
+              <p className="text-sm md:text-base text-gray-600 mt-1 px-2">
                 You've completed the {testData.moduleName} test
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-gray-50 p-4 rounded-lg text-center">
-                <p className="text-sm text-gray-500">Score</p>
-                <p className="text-2xl font-bold">{testResults.percentage}%</p>
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-4 mb-6 md:mb-8">
+              <div className="bg-gray-50 p-3 md:p-4 rounded-lg text-center">
+                <p className="text-xs md:text-sm text-gray-500">Score</p>
+                <p className="text-lg md:text-2xl font-bold">{testResults.percentage}%</p>
               </div>
-              <div className="bg-green-50 p-4 rounded-lg text-center">
-                <p className="text-sm text-green-600">Correct</p>
-                <p className="text-2xl font-bold text-green-700">{testResults.correct}</p>
+              <div className="bg-green-50 p-3 md:p-4 rounded-lg text-center">
+                <p className="text-xs md:text-sm text-green-600">Correct</p>
+                <p className="text-lg md:text-2xl font-bold text-green-700">{testResults.correct}</p>
               </div>
-              <div className="bg-red-50 p-4 rounded-lg text-center">
-                <p className="text-sm text-red-600">Incorrect</p>
-                <p className="text-2xl font-bold text-red-700">{testResults.incorrect}</p>
+              <div className="bg-red-50 p-3 md:p-4 rounded-lg text-center">
+                <p className="text-xs md:text-sm text-red-600">Incorrect</p>
+                <p className="text-lg md:text-2xl font-bold text-red-700">{testResults.incorrect}</p>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg text-center">
-                <p className="text-sm text-gray-500">Unattempted</p>
-                <p className="text-2xl font-bold text-gray-700">{testResults.unattempted}</p>
+              <div className="bg-gray-100 p-3 md:p-4 rounded-lg text-center">
+                <p className="text-xs md:text-sm text-gray-500">Unattempted</p>
+                <p className="text-lg md:text-2xl font-bold text-gray-700">{testResults.unattempted}</p>
               </div>
             </div>
 
             <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-4">
               <button
                 onClick={viewDetailedResults}
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center"
+                className="px-4 py-2 md:px-6 md:py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center text-sm md:text-base"
               >
-                <Eye size={18} className="mr-2" />
+                <Eye size={16} className="mr-2" />
                 View Detailed Results
               </button>
               <button
                 onClick={restartTest}
-                className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors flex items-center justify-center"
+                className="px-4 py-2 md:px-6 md:py-3 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors flex items-center justify-center text-sm md:text-base"
               >
                 Retake Test
               </button>
             </div>
           </div>
 
-          <div className="bg-indigo-50 rounded-xl p-6 border border-indigo-100">
-            <h3 className="font-medium text-indigo-800 mb-2">Performance Analysis</h3>
-            <p className="text-gray-700 text-sm">
+          <div className="bg-indigo-50 rounded-xl p-4 md:p-6 border border-indigo-100">
+            <h3 className="font-medium text-indigo-800 mb-2 text-sm md:text-base">Performance Analysis</h3>
+            <p className="text-gray-700 text-xs md:text-sm">
               {testResults.percentage >= 80 
                 ? "Excellent performance! You've mastered this subject matter."
                 : testResults.percentage >= 70 
@@ -364,50 +366,52 @@ export default function AttemptingTest() {
   if (testCompleted && showingResults) {
     return (
       <div ref={containerRef} className="min-h-screen bg-gray-50 flex flex-col">
-        <div className="bg-white border-b shadow-sm p-4 flex justify-between items-center">
+        <div className="bg-white border-b shadow-sm p-3 md:p-4 flex justify-between items-center">
           <div className="font-medium text-gray-700 flex items-center">
             <ArrowLeft 
-              className="mr-2 cursor-pointer hover:text-indigo-600" 
-              size={20} 
+              className="mr-1 md:mr-2 cursor-pointer hover:text-indigo-600" 
+              size={18} 
               onClick={closeDetailedResults}
             />
-            {testData.moduleName} - Detailed Results
+            <span className="truncate text-sm md:text-base">
+              {testData.moduleName} - Detailed Results
+            </span>
           </div>
         </div>
 
-        <div className="flex-grow p-6 md:p-8 flex flex-col max-w-4xl mx-auto w-full">
+        <div className="flex-grow p-3 md:p-8 flex flex-col max-w-4xl mx-auto w-full">
           {viewingSolution !== null ? (
             // Solution View
-            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-4">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-lg font-semibold text-gray-800">
+            <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 mb-4">
+              <div className="flex justify-between items-center mb-4 md:mb-6">
+                <h3 className="text-base md:text-lg font-semibold text-gray-800">
                   Question {viewingSolution + 1} Solution
                 </h3>
                 <button 
                   onClick={() => setViewingSolution(null)}
-                  className="p-2 hover:bg-gray-100 rounded-full"
+                  className="p-1 md:p-2 hover:bg-gray-100 rounded-full"
                 >
-                  <X size={20} className="text-gray-500" />
+                  <X size={18} className="text-gray-500" />
                 </button>
               </div>
 
-              <div className="mb-6">
+              <div className="mb-4 md:mb-6">
                 <div className="flex items-center mb-2">
-                  <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded">
+                  <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded">
                     {testResults.detailedResults[viewingSolution].question.level.toUpperCase()}
                   </span>
                   {testResults.detailedResults[viewingSolution].question.previousUsage && (
-                    <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded ml-2">
+                    <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded ml-2">
                       {testResults.detailedResults[viewingSolution].question.previousUsage}
                     </span>
                   )}
                 </div>
-                <h4 className="text-lg font-medium text-gray-800 mb-4">
+                <h4 className="text-base md:text-lg font-medium text-gray-800 mb-3 md:mb-4">
                   {testResults.detailedResults[viewingSolution].question.question}
                 </h4>
 
                 {/* Options with correct/incorrect highlighting */}
-                <div className="space-y-3 mb-6 text-black">
+                <div className="space-y-2 md:space-y-3 mb-4 md:mb-6 text-black text-sm md:text-base">
                   {testResults.detailedResults[viewingSolution].question.options.map((option, index) => {
                     const optionKey = String.fromCharCode(65 + index); // A, B, C, D
                     const isUserAnswer = testResults.detailedResults[viewingSolution].userAnswer === optionKey;
@@ -427,36 +431,36 @@ export default function AttemptingTest() {
                     return (
                       <div 
                         key={index}
-                        className={`flex items-center p-4 border-2 rounded-lg ${borderClass} ${bgClass}`}
+                        className={`flex items-center p-3 md:p-4 border-2 rounded-lg ${borderClass} ${bgClass}`}
                       >
-                        <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 mr-3 ${
+                        <div className={`flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full border-2 mr-2 md:mr-3 ${
                           isCorrectAnswer 
                             ? 'border-green-600 bg-green-600 text-white' 
                             : isUserAnswer 
                               ? 'border-red-600 bg-red-600 text-white'
                               : 'border-gray-300'
                         }`}>
-                          {(isCorrectAnswer || isUserAnswer) && <CheckCircle size={14} />}
+                          {(isCorrectAnswer || isUserAnswer) && <CheckCircle size={12} />}
                         </div>
-                        <div className="flex-1">
-                          <span className="font-medium mr-2">{optionKey}.</span>
+                        <div className="flex-1 text-sm md:text-base">
+                          <span className="font-medium mr-1 md:mr-2">{optionKey}.</span>
                           <span dangerouslySetInnerHTML={{ __html: option }} />
                         </div>
                         {isCorrectAnswer && (
-                          <span className="text-green-600 text-sm font-medium ml-2">Correct Answer</span>
+                          <span className="text-green-600 text-xs md:text-sm font-medium ml-1 md:ml-2">Correct</span>
                         )}
                         {isUserAnswer && !isCorrectAnswer && (
-                          <span className="text-red-600 text-sm font-medium ml-2">Your Answer</span>
+                          <span className="text-red-600 text-xs md:text-sm font-medium ml-1 md:ml-2">Your Answer</span>
                         )}
                       </div>
                     );
                   })}
                 </div>
 
-                {/* Explanation (if available - this would require adding an explanation field to your Test schema) */}
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                  <h5 className="font-medium text-blue-800 mb-1">Explanation</h5>
-                  <p className="text-gray-700 text-sm">
+                {/* Explanation */}
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 md:p-4">
+                  <h5 className="font-medium text-blue-800 mb-1 text-sm md:text-base">Explanation</h5>
+                  <p className="text-gray-700 text-xs md:text-sm">
                     {testResults.detailedResults[viewingSolution].question.explanation || 
                      `The correct answer is ${testResults.detailedResults[viewingSolution].question.answer}. 
                       ${testResults.detailedResults[viewingSolution].question.options[
@@ -466,55 +470,55 @@ export default function AttemptingTest() {
                 </div>
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex justify-between text-sm md:text-base">
                 <button
                   onClick={() => setViewingSolution(prev => Math.max(0, prev - 1))}
                   disabled={viewingSolution === 0}
-                  className={`px-4 py-2 flex items-center ${viewingSolution === 0 
+                  className={`px-2 py-1 md:px-4 md:py-2 flex items-center ${viewingSolution === 0 
                     ? 'text-gray-400 cursor-not-allowed' 
                     : 'text-indigo-600 hover:bg-indigo-50'} rounded transition-colors`}
                 >
-                  <ChevronLeft size={20} className="mr-1" />
-                  Previous Solution
+                  <ChevronLeft size={16} className="mr-0.5 md:mr-1" />
+                  Previous
                 </button>
                 <button
                   onClick={() => setViewingSolution(prev => Math.min(testResults.detailedResults.length - 1, prev + 1))}
                   disabled={viewingSolution === testResults.detailedResults.length - 1}
-                  className={`px-4 py-2 flex items-center ${viewingSolution === testResults.detailedResults.length - 1
+                  className={`px-2 py-1 md:px-4 md:py-2 flex items-center ${viewingSolution === testResults.detailedResults.length - 1
                     ? 'text-gray-400 cursor-not-allowed' 
                     : 'text-indigo-600 hover:bg-indigo-50'} rounded transition-colors`}
                 >
-                  Next Solution
-                  <ChevronRight size={20} className="ml-1" />
+                  Next
+                  <ChevronRight size={16} className="ml-0.5 md:ml-1" />
                 </button>
               </div>
             </div>
           ) : (
             // Results List View
-            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 mb-4">
+              <h3 className="text-base md:text-lg font-semibold text-gray-800 mb-4 md:mb-6">
                 Question-by-Question Results
               </h3>
               
               <div className="divide-y">
                 {testResults.detailedResults.map((result, index) => (
-                  <div key={index} className="py-4 flex items-center justify-between">
+                  <div key={index} className="py-3 md:py-4 flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
+                      <div className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center mr-2 md:mr-3 ${
                         result.isCorrect 
                           ? 'bg-green-100 text-green-700' 
                           : result.userAnswer === null
                             ? 'bg-gray-100 text-gray-500'
                             : 'bg-red-100 text-red-700'
                       }`}>
-                        {index + 1}
+                        <span className="text-xs md:text-sm">{index + 1}</span>
                       </div>
-                      <div className="max-w-xl">
-                        <p className="text-gray-800 font-medium truncate">
+                      <div className="max-w-xs md:max-w-xl">
+                        <p className="text-gray-800 font-medium truncate text-sm md:text-base">
                           {result.question.question}
                         </p>
-                        <div className="flex items-center text-sm mt-1">
-                          <span className="text-gray-500 mr-2">Your answer:</span>
+                        <div className="flex items-center text-xs md:text-sm mt-0.5 md:mt-1">
+                          <span className="text-gray-500 mr-1 md:mr-2">Your answer:</span>
                           <span className={`font-medium ${
                             result.isCorrect 
                               ? 'text-green-600' 
@@ -525,7 +529,7 @@ export default function AttemptingTest() {
                             {result.userAnswer || 'Not answered'}
                           </span>
                           {!result.isCorrect && result.userAnswer && (
-                            <span className="text-green-600 ml-2">
+                            <span className="text-green-600 ml-1 md:ml-2">
                               Correct: {result.question.answer}
                             </span>
                           )}
@@ -534,7 +538,7 @@ export default function AttemptingTest() {
                     </div>
                     <button
                       onClick={() => viewSolution(index)}
-                      className="px-3 py-1.5 text-sm text-indigo-600 hover:bg-indigo-50 rounded transition-colors"
+                      className="px-2 py-1 md:px-3 md:py-1.5 text-xs md:text-sm text-indigo-600 hover:bg-indigo-50 rounded transition-colors whitespace-nowrap"
                     >
                       View Solution
                     </button>
@@ -542,10 +546,10 @@ export default function AttemptingTest() {
                 ))}
               </div>
               
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-4 md:mt-6">
                 <button
                   onClick={closeDetailedResults}
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-1.5 md:px-6 md:py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm md:text-base"
                 >
                   Back to Summary
                 </button>
@@ -566,57 +570,57 @@ export default function AttemptingTest() {
       className="min-h-screen bg-gray-50 flex flex-col"
     >
       {/* Header with timer and progress */}
-      <div className="bg-white border-b shadow-sm p-4 flex justify-between items-center">
-        <div className="font-medium text-gray-700">
+      <div className="bg-white border-b shadow-sm p-3 flex flex-col md:flex-row md:justify-between md:items-center">
+        <div className="font-medium text-gray-700 text-sm md:text-base mb-2 md:mb-0">
           {testData.moduleName}
         </div>
         
-        <div className="flex space-x-6 items-center">
+        <div className="flex justify-between md:space-x-6 items-center">
           <div className="flex items-center">
-            <span className="text-gray-600 mr-2">Question:</span>
-            <span className="font-semibold">{currentQuestionIndex + 1}/{testData.moduleData.length}</span>
+            <span className="text-gray-600 mr-1 text-xs md:text-sm">Question:</span>
+            <span className="font-semibold text-xs md:text-sm">{currentQuestionIndex + 1}/{testData.moduleData.length}</span>
           </div>
           
-          <div className={`flex items-center ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-700'}`}>
-            <Clock className="mr-1" size={18} />
-            <span className="font-mono font-medium">{formatTime(timeLeft)}</span>
+          <div className={`flex items-center ml-3 ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-700'}`}>
+            <Clock className="mr-0.5 md:mr-1" size={14} />
+            <span className="font-mono font-medium text-xs md:text-sm">{formatTime(timeLeft)}</span>
           </div>
           
           <button
             onClick={handleSubmitTest}
-            className="px-4 py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors text-sm"
+            className="px-2 py-1 ml-3 md:ml-0 md:px-4 md:py-1.5 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors text-xs md:text-sm"
           >
-            Submit Test
+            Submit
           </button>
         </div>
       </div>
       
       {/* Question area */}
-      <div className="flex-grow p-6 md:p-8 flex flex-col max-w-5xl mx-auto w-full">
+      <div className="flex-grow p-3 md:p-8 flex flex-col max-w-5xl mx-auto w-full">
         <div 
-          className={`bg-white rounded-xl shadow-lg p-6 md:p-8 transition-opacity duration-300 ${
+          className={`bg-white rounded-xl shadow-lg p-4 md:p-8 transition-opacity duration-300 ${
             fadeIn ? 'opacity-100' : 'opacity-0'
           }`}
         >
           {/* Question text */}
-          <div className="mb-6">
-            <div className="flex items-center mb-4">
-              <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-1 rounded">
+          <div className="mb-4 md:mb-6">
+            <div className="flex items-center mb-2 md:mb-4">
+              <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded">
                 {currentQuestion.level.toUpperCase()}
               </span>
               {currentQuestion.previousUsage && (
-                <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded ml-2">
+                <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded ml-2">
                   {currentQuestion.previousUsage}
                 </span>
               )}
             </div>
-            <h3 className="text-xl font-medium text-gray-800">
+            <h3 className="text-base md:text-xl font-medium text-gray-800">
               {currentQuestionIndex + 1}. {currentQuestion.question}
             </h3>
           </div>
           
           {/* Options */}
-          <div className="space-y-3 text-black">
+          <div className="space-y-2 md:space-y-3 text-black text-sm md:text-base">
             {currentQuestion.options.map((option, index) => {
               const optionKey = String.fromCharCode(65 + index); // A, B, C, D
               const isSelected = answers[currentQuestion._id] === optionKey;
@@ -625,19 +629,19 @@ export default function AttemptingTest() {
                 <div 
                   key={index}
                   onClick={() => handleAnswerSelect(currentQuestion._id, index)}
-                  className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${isSelected 
+                  className={`flex items-center p-3 md:p-4 border-2 rounded-lg cursor-pointer transition-all ${isSelected 
                     ? 'border-indigo-600 bg-indigo-50' 
                     : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50'}`}
                 >
-                  <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 mr-3 ${
+                  <div className={`flex items-center justify-center w-5 h-5 md:w-6 md:h-6 rounded-full border-2 mr-2 md:mr-3 ${
                     isSelected 
                       ? 'border-indigo-600 bg-indigo-600 text-white' 
                       : 'border-gray-300'
                   }`}>
                     {isSelected && <CheckCircle size={14} />}
                   </div>
-                  <div className="flex-1">
-                    <span className="font-medium mr-2">{optionKey}.</span>
+                  <div className="flex-1 text-sm md:text-base">
+                    <span className="font-medium mr-1 md:mr-2">{optionKey}.</span>
                     <span dangerouslySetInnerHTML={{ __html: option }} />
                   </div>
                 </div>
@@ -648,19 +652,19 @@ export default function AttemptingTest() {
       </div>
       
       {/* Navigation controls */}
-      <div className="bg-white border-t p-4 flex justify-between">
+      <div className="bg-white border-t p-2 md:p-4 flex justify-between items-center">
         <button
           onClick={handlePrevQuestion}
           disabled={currentQuestionIndex === 0}
-          className={`px-4 py-2 flex items-center ${currentQuestionIndex === 0 
-            ? 'text-gray-400 cursor-not-allowed' 
+          className={`px-2 py-1 md:px-4 md:py-2 flex items-center text-xs md:text-sm ${currentQuestionIndex === 0
+            ? 'text-gray-400 cursor-not-allowed'
             : 'text-indigo-600 hover:bg-indigo-50'} rounded transition-colors`}
         >
-          <ChevronLeft size={20} className="mr-1" />
-          Previous
+          <ChevronLeft size={16} className="mr-0.5 md:mr-1" />
+          <span className="hidden xs:inline">Previous</span>
         </button>
         
-        <div className="flex space-x-1 overflow-x-auto max-w-md pb-1">
+        <div className="flex space-x-1 overflow-x-auto pb-1 max-w-[50vw] md:max-w-md">
           {Array.from({ length: testData.moduleData.length }).map((_, index) => {
             const isAnswered = !!answers[testData.moduleData[index]._id];
             const isCurrent = index === currentQuestionIndex;
@@ -675,11 +679,11 @@ export default function AttemptingTest() {
                     setFadeIn(true);
                   }, 300);
                 }}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                  isCurrent 
-                    ? 'bg-indigo-600 text-white' 
-                    : isAnswered 
-                      ? 'bg-green-100 text-green-800' 
+                className={`min-w-6 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center text-xs md:text-sm ${
+                  isCurrent
+                    ? 'bg-indigo-600 text-white'
+                    : isAnswered
+                      ? 'bg-green-100 text-green-800'
                       : 'bg-gray-100 text-gray-600'
                 }`}
               >
@@ -692,12 +696,12 @@ export default function AttemptingTest() {
         <button
           onClick={handleNextQuestion}
           disabled={currentQuestionIndex === testData.moduleData.length - 1}
-          className={`px-4 py-2 flex items-center ${currentQuestionIndex === testData.moduleData.length - 1
-            ? 'text-gray-400 cursor-not-allowed' 
+          className={`px-2 py-1 md:px-4 md:py-2 flex items-center text-xs md:text-sm ${currentQuestionIndex === testData.moduleData.length - 1
+            ? 'text-gray-400 cursor-not-allowed'
             : 'text-indigo-600 hover:bg-indigo-50'} rounded transition-colors`}
         >
-          Next
-          <ChevronRight size={20} className="ml-1" />
+          <span className="hidden xs:inline">Next</span>
+          <ChevronRight size={16} className="ml-0.5 md:ml-1" />
         </button>
       </div>
     </div>

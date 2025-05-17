@@ -5,81 +5,17 @@ const CodeEditor = () => {
   const [text, setText] = useState('');
   const [showResult, setShowResult] = useState(false);
   
-  const promptText = "Create a test suite for a user authentication system with login, signup and password reset functions.";
+  const promptText = "Karan Rawat ";
 
-  const testCode = `// Generated Test Suite
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { login, signup, resetPassword } from './auth';
-import { mockUserDB } from './test-utils';
+  const testCode = `Welcome to MindCraft, where we simplify learning and testing through the power of AI.
 
-describe('Authentication System', () => {
-  beforeEach(() => {
-    mockUserDB.clear();
-  });
+At MindCraft, we believe that assessments should be smart, fast, and effortless. That’s why we’ve built a prompt-based test generation platform that empowers students and educators alike. Just enter a topic or prompt—our intelligent system will instantly create a comprehensive, well-structured test designed to evaluate understanding and boost knowledge retention.
 
-  describe('Login', () => {
-    it('should successfully log in a user with valid credentials', async () => {
-      // Arrange
-      const testUser = { email: 'test@example.com', password: 'Password123!' };
-      await mockUserDB.createUser(testUser);
-      
-      // Act
-      const result = await login(testUser.email, testUser.password);
-      
-      // Assert
-      expect(result.success).toBe(true);
-      expect(result.token).toBeDefined();
-      expect(result.user.email).toBe(testUser.email);
-    });
+Whether you're preparing for exams or creating quizzes for classroom use, MindCraft saves time, eliminates manual effort, and delivers quality assessments tailored to your needs.
 
-    it('should reject login with incorrect password', async () => {
-      // Arrange
-      const testUser = { email: 'test@example.com', password: 'Password123!' };
-      await mockUserDB.createUser(testUser);
-      
-      // Act & Assert
-      await expect(login(testUser.email, 'WrongPassword123!'))
-        .rejects.toThrow('Invalid credentials');
-    });
+Our mission is to make learning more engaging and accessible by leveraging advanced technology to turn ideas into assessments—instantly.
 
-    it('should reject login for non-existent user', async () => {
-      // Act & Assert
-      await expect(login('nonexistent@example.com', 'Password123!'))
-        .rejects.toThrow('User not found');
-    });
-  });
-
-  describe('Signup', () => {
-    it('should create a new user account successfully', async () => {
-      // Arrange
-      const newUser = { 
-        email: 'newuser@example.com', 
-        password: 'Password123!',
-        name: 'New User'
-      };
-      
-      // Act
-      const result = await signup(newUser);
-      
-      // Assert
-      expect(result.success).toBe(true);
-      expect(result.user.email).toBe(newUser.email);
-      expect(result.user.name).toBe(newUser.name);
-    });
-
-    it('should reject signup with existing email', async () => {
-      // Arrange
-      const existingUser = { email: 'existing@example.com', password: 'Password123!' };
-      await mockUserDB.createUser(existingUser);
-      
-      // Act & Assert
-      await expect(signup({ ...existingUser, name: 'Another Name' }))
-        .rejects.toThrow('Email already in use');
-    });
-  });
-
-  // More tests...
-});`;
+Join us in transforming the way we test and learn.`;
 
   useEffect(() => {
     if (text.length < promptText.length) {
@@ -103,13 +39,13 @@ describe('Authentication System', () => {
           <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
           <div className="w-3 h-3 rounded-full bg-green-500"></div>
         </div>
-        <div className="text-xs text-dark-200">prompt-test-generator.js</div>
+        <div className="text-xs text-dark-200">About Website</div>
         <div></div>
       </div>
       
       <div className="bg-dark-800 dark:bg-dark-900 text-white p-4 font-mono text-sm h-96 overflow-auto">
         <div className="mb-4">
-          <span className="text-purple-400">&gt;</span> <span className="text-green-400">Prompt</span>: <span className="typing-animation">{text}</span>
+          <span className="text-purple-400">&gt;</span> <span className="text-green-400">Founder</span>: <span className="typing-animation">{text}</span>
         </div>
         
         {showResult && (
@@ -119,7 +55,7 @@ describe('Authentication System', () => {
             transition={{ duration: 0.5 }}
           >
             <div className="mb-2">
-              <span className="text-purple-400">&gt;</span> <span className="text-blue-400">Generating tests...</span>
+              <span className="text-purple-400">&gt;</span> <span className="text-blue-400">Website Goal...</span>
             </div>
             
             <motion.pre 
@@ -137,7 +73,7 @@ describe('Authentication System', () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 3 }}
             >
-              <span className="text-purple-400">&gt;</span> Test suite generated successfully! 15 tests created across 3 modules.
+              <span className="text-purple-400">&gt;</span> Contact : karanrawat9149@gmail.com
             </motion.div>
           </motion.div>
         )}

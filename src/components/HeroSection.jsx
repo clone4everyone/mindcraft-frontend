@@ -143,14 +143,7 @@ const HeroSection = () => {
                 </motion.span>
               </motion.p>
               
-              <motion.a 
-                href="#demo"
-                className="btn btn-outline flex items-center justify-center space-x-2"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span>See it in action</span>
-              </motion.a>
+          
             </motion.div>
             
             <motion.div 

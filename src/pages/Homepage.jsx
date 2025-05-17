@@ -18,7 +18,7 @@ const Homepage = () => {
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
-      <DemoSection/>
+      {/* <DemoSection/> */}
       <TestimonialsSection/>
       {/* <PricingSection /> */}
     </main>

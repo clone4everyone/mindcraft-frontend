@@ -100,7 +100,7 @@ const Footer = () => {
         
         <div className="pt-8 border-t border-gray-200 dark:border-dark-700 flex flex-col md:flex-row justify-between items-center">
           <p className="text-dark-500 dark:text-dark-400 text-sm mb-4 md:mb-0">
-            © {new Date().getFullYear()} TestPrompt. All rights reserved.
+            © {new Date().getFullYear()} MindCraft. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a href="#" className="text-dark-500 hover:text-primary-500 dark:text-dark-400 dark:hover:text-primary-400 text-sm transition-colors">

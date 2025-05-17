@@ -7,7 +7,8 @@ export default function AttemptingTest() {
   const { testId } = useParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(10 * 60); 
+  const [initialTime, setInitialTime] = useState(10 * 60);// 10 minutes in seconds
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
@@ -21,47 +22,55 @@ export default function AttemptingTest() {
   let initialtime;
 
   // Fetch test data
-  useEffect(() => {
-    const fetchTestData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await API.post(`/api/v1/gemini/getTestById`, {
-          testId: testId
-        });
-        setTestData(response.data.test);
-        setTimeLeft(response.data.test.durationSeconds);
-        initialtime = response.data.test.durationSeconds;
-        setTimeout(() => {
-          setIsLoading(false);
-          setTimeout(() => setFadeIn(true), 100);
-        }, 1000);
-      } catch (err) {
-        console.error("Error fetching test data:", err);
-        setError("Failed to load test. Please try again later.");
+useEffect(() => {
+  const fetchTestData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await API.post(`/api/v1/gemini/getTestById`, {
+        testId: testId
+      });
+      setTestData(response.data.test);
+      setTimeLeft(response.data.test.durationSeconds);
+      setInitialTime(response.data.test.durationSeconds); // Set initial time in state
+      setTimeout(() => {
         setIsLoading(false);
-      }
-    };
-
-    if (testId) {
-      fetchTestData();
+        setTimeout(() => setFadeIn(true), 100);
+      }, 1000);
+    } catch (err) {
+      console.error("Error fetching test data:", err);
+      setError("Failed to load test. Please try again later.");
+      setIsLoading(false);
     }
-  }, [testId]);
+  };
+
+  if (testId) {
+    fetchTestData();
+  }
+}, [testId]);
+
 
   // Handle fullscreen change
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      const isDocFullscreen = document.fullscreenElement !== null;
-      setIsFullscreen(isDocFullscreen);
-      
-      // If exited fullscreen and test was in progress (not viewing results), submit the test
-      if (!isDocFullscreen && !isLoading && !testCompleted) {
-        handleSubmitTest();
-      }
-    };
+useEffect(() => {
+  const handleFullscreenChange = () => {
+    const isDocFullscreen = document.fullscreenElement !== null;
+    setIsFullscreen(isDocFullscreen);
+  };
 
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, [isLoading, testCompleted]);
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+  return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+}, []);
+
+// Separate effect for auto-submitting when fullscreen exits
+useEffect(() => {
+  if (!isFullscreen && !isLoading && !testCompleted && !showingResults && testData) {
+    // Small delay to ensure state is updated before submission
+    const timer = setTimeout(() => {
+      handleSubmitTest();
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }
+}, [isFullscreen, isLoading, testCompleted, showingResults, testData]);
 
   // Request fullscreen when component mounts and not loading
   useEffect(() => {
@@ -113,10 +122,14 @@ export default function AttemptingTest() {
     }));
   };
 
-  const handleSubmitTest = () => {
-    // Exit fullscreen
-    exitFullscreen();
-    
+ const handleSubmitTest = () => {
+  // Exit fullscreen
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(err => console.error(err));
+  }
+  
+  // Set a small timeout to ensure state is up-to-date
+  setTimeout(() => {
     // Calculate results
     if (testData && testData.moduleData) {
       const results = calculateResults(answers, testData.moduleData);
@@ -126,7 +139,8 @@ export default function AttemptingTest() {
       // Save results to backend (optional)
       // saveResultsToBackend(results);
     }
-  };
+  }, 100);
+};
 
   const calculateResults = (userAnswers, questions) => {
     let correct = 0;
@@ -186,16 +200,16 @@ export default function AttemptingTest() {
     }
   };
 
-  const restartTest = () => {
-    setAnswers({});
-    setTimeLeft(initialtime);
-    setTestCompleted(false);
-    setShowingResults(false);
-    setViewingSolution(null);
-    setCurrentQuestionIndex(0);
-    setFadeIn(false);
-    setTimeout(() => setFadeIn(true), 100);
-  };
+ const restartTest = () => {
+  setAnswers({});
+  setTimeLeft(initialTime); // Use the state variable instead
+  setTestCompleted(false);
+  setShowingResults(false);
+  setViewingSolution(null);
+  setCurrentQuestionIndex(0);
+  setFadeIn(false);
+  setTimeout(() => setFadeIn(true), 100);
+};
 
   const viewDetailedResults = () => {
     setShowingResults(true);
@@ -269,7 +283,7 @@ export default function AttemptingTest() {
             <ArrowLeft 
               className="mr-2 cursor-pointer hover:text-indigo-600" 
               size={20} 
-              onClick={() => window.location.href = '/'} 
+              onClick={() => window.location.href = '/user/collection'} 
             />
             <span className="truncate">
               {testData.moduleName} - Test Results

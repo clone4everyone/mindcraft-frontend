@@ -2,8 +2,9 @@ import { useRef, useEffect } from 'react';
 import { motion, useInView, useAnimationControls } from 'framer-motion';
 import { FiArrowRight } from 'react-icons/fi';
 import CodeEditor from './CodeEditor';
-import { useClerk,useUser } from '@clerk/clerk-react';
-import {useNavigate} from 'react-router-dom';
+import { useClerk, useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+
 const HeroSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -11,6 +12,7 @@ const HeroSection = () => {
   const { redirectToSignIn } = useClerk();
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isInView) {
       mainControls.start("visible");
@@ -27,14 +29,21 @@ const HeroSection = () => {
       }
     }
   };
-  const handleGetStarted = () => {
-    if(isSignedIn) {
-    navigate("/user/new")
-    }else{
-        redirectToSignIn();
+
+  const handleGetStarted = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Button clicked!'); // Debug log
+    
+    if (isSignedIn) {
+      console.log('User is signed in, navigating to /user/new'); // Debug log
+      navigate("/user/new");
+    } else {
+      console.log('User not signed in, redirecting to sign in'); // Debug log
+      redirectToSignIn();
     }
-  
   };
+
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -126,24 +135,38 @@ const HeroSection = () => {
             </motion.p>
             
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <motion.p 
+              {/* Method 1: Simple button without framer-motion wrapper */}
+              <button 
                 onClick={handleGetStarted}
-                className="btn btn-primary flex items-center justify-center sm:justify-start space-x-2 group hover:cursor-pointer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="btn btn-primary flex items-center justify-center sm:justify-start space-x-2 group cursor-pointer relative z-10"
+                type="button"
+                style={{ pointerEvents: 'auto' }} // Ensure pointer events are enabled
               >
-                <span className="hover:cursor-pointer " >Get Started Free</span>
-                <motion.span
-                  variants={bounceVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="inline-block"
-                >
+                <span>Get Started Free</span>
+                <span className="inline-block">
                   <FiArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </motion.span>
-              </motion.p>
-              
-          
+                </span>
+              </button>
+
+              {/* Alternative Method 2: If above doesn't work, try this div approach */}
+              {/* 
+              <div 
+                onClick={handleGetStarted}
+                className="btn btn-primary flex items-center justify-center sm:justify-start space-x-2 group cursor-pointer select-none"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleGetStarted(e);
+                  }
+                }}
+              >
+                <span>Get Started Free</span>
+                <span className="inline-block">
+                  <FiArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </div>
+              */}
             </motion.div>
             
             <motion.div 
